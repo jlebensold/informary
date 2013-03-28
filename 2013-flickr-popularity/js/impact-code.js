@@ -71,7 +71,9 @@ var process = function (json) {
             pathes[i].p = r.path().attr({fill: clr, stroke: clr});
             var path = "M".concat(pathes[i].f[0][0], ",", pathes[i].f[0][1], "L", pathes[i].f[0][0] + 50, ",", pathes[i].f[0][1]);
             var th = Math.round(pathes[i].f[0][1] + (pathes[i].b[pathes[i].b.length - 1][1] - pathes[i].f[0][1]) / 2 + 3);
-            labels[i].push(r.text(pathes[i].f[0][0] + 25, th, pathes[i].f[0][2]).attr(textattr));
+
+// initial label            
+//            labels[i].push(r.text(pathes[i].f[0][0] + 25, th, pathes[i].f[0][2]).attr(textattr));
             var X = pathes[i].f[0][0] + 50,
                 Y = pathes[i].f[0][1];
             for (var j = 1, jj = pathes[i].f.length; j < jj; j++) {
@@ -81,7 +83,8 @@ var process = function (json) {
                 path = path.concat(X - 20, ",", Y, ",", X, ",", Y, "L", X += 50, ",", Y);
                 th = Math.round(Y + (pathes[i].b[pathes[i].b.length - 1 - j][1] - Y) / 2 + 3);
                 if (th - 9 > Y) {
-                    labels[i].push(r.text(X - 25, th, pathes[i].f[j][2]).attr(textattr));
+//assign a label
+//                  labels[i].push(r.text(X - 25, th, pathes[i].f[j][2]).attr(textattr));
                 }
             }
             path = path.concat("L", pathes[i].b[0][0] + 50, ",", pathes[i].b[0][1], ",", pathes[i].b[0][0], ",", pathes[i].b[0][1]);
@@ -92,7 +95,8 @@ var process = function (json) {
             labels[i].hide();
             var current = null;
             (function (i) {
-                pathes[i].p.mouseover(function () {
+                pathes[i].p.mouseover(function (e) {
+                  console.log(Math.floor(e.x / 100));
                     if (current != null) {
                         labels[current].hide();
                     }
