@@ -7,9 +7,8 @@ var process = function (json) {
         nmhldr = $("#name")[0],
         nmhldr2 = $("#name2")[0],
         lgnd = $("#legend")[0],
-        usrnm = $("#username")[0],
         lgnd2 = $("#legend2")[0],
-        usrnm2 = $("#username2")[0],
+        label = $("#label")[0],
         plchldr = $("#placeholder")[0];
     function finishes() {
         for (var i in json.cameras) {
@@ -101,7 +100,7 @@ var process = function (json) {
                     labels[i].show();
                     pathes[i].p.toFront();
                     labels[i].toFront();
-                    usrnm2.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
+                    label.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
                     lgnd2.style.backgroundColor = pathes[i].p.attr("fill");
                     nmhldr2.className = "";
                     plchldr.className = "hidden";
