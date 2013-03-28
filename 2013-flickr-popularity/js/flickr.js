@@ -40,19 +40,19 @@ var table =
   ['2013/03/01',0,3,0,4,5,0,0,0,0,2,0,0,0,1,0,0]
 ];
 
-
-
 function getCameras(row) {
   return  _.map(row.slice(1), function(cell) {
     return { name: cell, brand: cell.split(' ')[0] }; 
   });
 }
+
 function getBucket(row) {
   return {
     date: row[0],
     i: getPopularities(row)
   };
 }
+
 function getPopularities(row) {
   row = row.slice(1);
   var a = _.filter(_.map(row,function(cell, i) { return { val: (cell == '5'), index: i }; }), function(o) {  return o.val;   })[0];
@@ -68,13 +68,8 @@ function getPopularities(row) {
     [ e.index, 1000 ]
   ]
 }
-var json;
+
 $(function() {
-  var buckets = [];
-  var cameras = getCameras(table[0]);
-  _.each(table.slice(1), function(row) { 
-      buckets.push(getBucket(row));
-  });
-  json = {buckets: buckets, cameras: cameras }; 
-  process(json);
+  var buckets = _.map(table.slice(1), function(row) { return getBucket(row); });
+  process({buckets: buckets, cameras: getCameras(table[0]) });
 });

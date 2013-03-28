@@ -45,6 +45,7 @@ var process = function (json) {
         }
     }
     function block() {
+        var line = r.path("M0 0L0 300").attr({"id": "vertline","stroke": "#ddd", "stroke-width":"15", "z-index":1000, opacity: 0.3});
         var p, h;
         finishes();
         for (var j = 0, jj = json.buckets.length; j < jj; j++) {
@@ -94,14 +95,19 @@ var process = function (json) {
             pathes[i].p.attr({path: path + "z"});
             labels[i].hide();
             var current = null;
+            $("#chart").mouseover(function (e) {
+              var parentOffset = $(this).parent().offset(); 
+              var xcoord = e.pageX - parentOffset.left + $("#chart").scrollLeft();
+              $("path[stroke-width=15]").attr('d',"M"+xcoord+" 0L"+xcoord+" 300");
+              line.toFront();
+              var bucket = json.buckets[Math.floor(e.clientX / 100)];
+              $("#pie").empty();
+              Raphael("pie", 700, 700).pieChart(350, 350, 200, 
+                getBrandValues(bucket,json.cameras),
+                getBrandLabels(bucket,json.cameras), "#fff");
+            });
             (function (i) {
                 pathes[i].p.mouseover(function (e) {
-                  var bucket = json.buckets[Math.floor(e.x / 100)];
-                  
-                  $("#pie").empty();
-                  Raphael("pie", 700, 700).pieChart(350, 350, 200, 
-                    getBrandValues(bucket,json.cameras),
-                    getBrandLabels(bucket,json.cameras), "#fff");
                     if (current != null) {
                         labels[current].hide();
                     }
