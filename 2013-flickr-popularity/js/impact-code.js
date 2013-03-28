@@ -12,7 +12,7 @@ var process = function (json) {
         usrnm2 = $("#username2")[0],
         plchldr = $("#placeholder")[0];
     function finishes() {
-        for (var i in json.authors) {
+        for (var i in json.cameras) {
             var start, end;
             for (var j = json.buckets.length - 1; j >= 0; j--) {
                 var isin = false;
@@ -60,7 +60,7 @@ var process = function (json) {
                 p.b.unshift([x, h += Math.max(Math.round(Math.log(users[i][1]) * 5), 1)]);
                 h += 2;
             }
-            var dt = new Date(json.buckets[j].d * 1000);
+            var dt = new Date(json.buckets[j].date);
             var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
             r.text(x + 25, h + 10, dtext).attr({"font": '9px "Arial"', stroke: "none", fill: "#aaa"});
             x += 100;
@@ -101,7 +101,7 @@ var process = function (json) {
                     labels[i].show();
                     pathes[i].p.toFront();
                     labels[i].toFront();
-                    usrnm2.innerHTML = json.authors[i].n + " <em>(" + json.authors[i].c + " commits, " + json.authors[i].a + " additions, " + json.authors[i].d + " deletions)</em>";
+                    usrnm2.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
                     lgnd2.style.backgroundColor = pathes[i].p.attr("fill");
                     nmhldr2.className = "";
                     plchldr.className = "hidden";
