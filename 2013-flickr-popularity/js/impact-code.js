@@ -1,6 +1,6 @@
 var process = function (json) {
     var x = 0,
-        r = Raphael("chart", 2350, 550),
+        r = Raphael("chart", 3650,250),
         labels = {},
         textattr = {"font": '9px "Arial"', stroke: "none", fill: "#fff"},
         pathes = {},
@@ -114,6 +114,3 @@ var process = function (json) {
         block();
     }
 };
-$(function () {
-    process(json);
-});
