@@ -96,7 +96,12 @@ var process = function (json) {
             var current = null;
             (function (i) {
                 pathes[i].p.mouseover(function (e) {
-                  console.log(Math.floor(e.x / 100));
+                  var bucket = json.buckets[Math.floor(e.x / 100)];
+                  
+                  $("#pie").empty();
+                  Raphael("pie", 700, 700).pieChart(350, 350, 200, 
+                    getBrandValues(bucket,json.cameras),
+                    getBrandLabels(bucket,json.cameras), "#fff");
                     if (current != null) {
                         labels[current].hide();
                     }
@@ -117,4 +122,69 @@ var process = function (json) {
     } else {
         block();
     }
+};
+
+function getBrandGroups(bucket,cameras) {
+  return _.groupBy(_.map(bucket.i, function(b) { return cameras[b[0]].brand }));
+}
+
+function getBrandLabels(bucket,cameras) {
+  var groups = getBrandGroups(bucket,cameras);
+  return _.map(groups,function(k,v) { return v; });
+}
+
+function getBrandValues(bucket,cameras) { 
+  var groups = getBrandGroups(bucket,cameras);
+  return _.map(groups,function(k,v) { return k.length * 20; });
+}
+Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
+    var paper = this,
+        rad = Math.PI / 180,
+        chart = this.set();
+    function sector(cx, cy, r, startAngle, endAngle, params) {
+        var x1 = cx + r * Math.cos(-startAngle * rad),
+            x2 = cx + r * Math.cos(-endAngle * rad),
+            y1 = cy + r * Math.sin(-startAngle * rad),
+            y2 = cy + r * Math.sin(-endAngle * rad);
+        return paper.path(["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"]).attr(params);
+    }
+    var angle = 0,
+        total = 0,
+        start = 0,
+        process = function (j) {
+          var bcolor = Raphael.hsb(start, 1, 1);
+          var color = Raphael.hsb(start, .75, 1);
+          if (labels[j] == "Apple"){
+            color = "#CCC";
+            bcolor = "#909090";
+          }
+          if (labels[j] == "Canon"){
+            color = "#FF0000";
+            bcolor = "#900000";
+          }
+          if (labels[j] == "Nikon"){
+            color = "yellow";
+            bcolor = "orange";
+          }
+          var value = values[j],
+          angleplus = 360 * value / total,
+          popangle = angle + (angleplus / 2),
+          ms = 500,
+          delta = 30;
+          
+          
+          p = sector(cx, cy, r, angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 3}),
+          txt = paper.text(cx + (r + delta + 55) * Math.cos(-popangle * rad), cy + (r + delta + 25) * Math.sin(-popangle * rad), labels[j]).attr({fill: bcolor, stroke: "none", opacity: 1, "font-size": 20});
+          angle += angleplus;
+          chart.push(p);
+          chart.push(txt);
+          start += .1;
+        };
+    for (var i = 0, ii = values.length; i < ii; i++) {
+        total += values[i];
+    }
+    for (i = 0; i < ii; i++) {
+        process(i);
+    }
+    return chart;
 };

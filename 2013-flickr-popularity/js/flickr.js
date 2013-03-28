@@ -61,11 +61,11 @@ function getPopularities(row) {
   var d = _.filter(_.map(row,function(cell, i) { return { val: (cell == '2'), index: i }; }), function(o) {  return o.val;   })[0];
   var e = _.filter(_.map(row,function(cell, i) { return { val: (cell == '1'), index: i }; }), function(o) {  return o.val;   })[0];
   return [
-    [ a.index, 10000 ],
+    [ a.index, 1000 ],
     [ b.index, 1000 ],
-    [ c.index, 100 ],
-    [ d.index, 50 ],
-    [ e.index, 20 ]
+    [ c.index, 1000 ],
+    [ d.index, 1000 ],
+    [ e.index, 1000 ]
   ]
 }
 var json;
