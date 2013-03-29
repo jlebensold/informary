@@ -5,9 +5,7 @@ var process = function (json) {
         textattr = {"font": '9px "Arial"', stroke: "none", fill: "#fff"},
         pathes = {},
         nmhldr = $("#name")[0],
-        nmhldr2 = $("#name2")[0],
         lgnd = $("#legend")[0],
-        lgnd2 = $("#legend2")[0],
         label = $("#label")[0],
         plchldr = $("#placeholder")[0];
     function finishes() {
@@ -47,7 +45,7 @@ var process = function (json) {
     function block() {
         var p, h;
         finishes();
-        var line = r.path("M0 0L0 300").attr({"stroke": "#EFDDDD", "stroke-width":"55", "z-index":1000, opacity: 0});
+        var line = r.path("M0 0L0 300").attr({"stroke": "#8a3aFF", "stroke-width":"55", "z-index":1000, opacity: 0});
 
         for (var j = 0, jj = json.buckets.length; j < jj; j++) {
             var users = json.buckets[j].i;
@@ -63,13 +61,16 @@ var process = function (json) {
             }
             var dt = new Date(json.buckets[j].date);
             var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
-            r.text(x + 25, h + 10, dtext).attr({"font": '9px "Arial"', stroke: "none", fill: "#aaa"});
+                
+            r.rect(x - 4, 0, 60, 300).attr({fill: "#DDDDDD", stroke: "none"}).toFront();
+            r.text(x + 25, h + 10, dtext).attr({"font": '9px "Arial"', stroke: "none", fill: "#3333FB"}).toFront();
             x += 100;
         }
         var c = 0;
         for (var i in pathes) {
             labels[i] = r.set();
             var clr = Raphael.getColor();
+            var clr = getColour(json.cameras[i].brand);
             pathes[i].p = r.path().attr({fill: clr, stroke: clr});
             var path = "M".concat(pathes[i].f[0][0], ",", pathes[i].f[0][1], "L", pathes[i].f[0][0] + 50, ",", pathes[i].f[0][1]);
             var th = Math.round(pathes[i].f[0][1] + (pathes[i].b[pathes[i].b.length - 1][1] - pathes[i].f[0][1]) / 2 + 3);
@@ -90,47 +91,43 @@ var process = function (json) {
             labels[i].hide();
             var current = null;
             (function (i) {
-                pathes[i].p.mouseover(function (e) {
-                    if (current != null) {
-                        labels[current].hide();
-                    }
-                    current = i;
-                    labels[i].show();
-                    pathes[i].p.toFront();
-                    labels[i].toFront();
-                    label.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
-                    lgnd2.style.backgroundColor = pathes[i].p.attr("fill");
-                    nmhldr2.className = "";
-                    plchldr.className = "hidden";
-                });
+              pathes[i].p.mouseover(function (e) {
+                if (current != null) {
+                    labels[current].hide();
+                }
+                current = i;
+                labels[i].show();
+                pathes[i].p.toFront();
+                labels[i].toFront();
+                label.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
+                lgnd.style.backgroundColor = pathes[i].p.attr("fill");
+                nmhldr.className = "";
+              });
             })(i);
         }
-        var pie,piechart;
-        $("#chart text").mouseover(function (e) {
-          e.preventDefault();
-          var xcoord = e.pageX - $(this).parent().offset().left + $("#chart svg").scrollLeft();
-          var xcoord = Math.floor(xcoord / 100)*100 + 25;
-          line.animate({ path: "M"+xcoord+" 0L"+xcoord+" 300" , opacity: "0.3"}, 100);
-          line.toFront();
-          var bucket = json.buckets[Math.floor(e.clientX / 100)];
-          if ($("#pie > *").length == 0) { 
-            pie = Raphael("pie", 700, 700);
-            piechart = pie.pieChart(350, 350, 200, 
-              getBrandValues(bucket,json.cameras),
-              getBrandLabels(bucket,json.cameras), "#fff");
-          } else {
-            console.log('animate');
-            pieAnimate(pie,piechart,getBrandValues(bucket,json.cameras),getBrandLabels(bucket,json.cameras) );
-          }
+        $("#chart").mousemove(function (e) {
+          updatePie(e,json,line, this);
         });
     }
+    
+
     if (json.error) {
         alert("Project not found. Try again.");
     } else {
         block();
     }
 };
-
+function updatePie(e,json,line, self) {
+  var xcoord = e.pageX - $(self).find('svg').offset().left + $("#chart svg").scrollLeft();
+  var xcoord = Math.floor(xcoord / 100)*100 + 25 + 1;
+  line.animate({ path: "M"+xcoord+" 0L"+xcoord+" 300" , opacity: "0.3"}, 0).toFront();
+  $("#pie").empty();
+  var bucket = json.buckets[Math.floor(xcoord / 100)];
+    pie = Raphael("pie", 700, 700);
+    piechart = pie.pieChart(350, 350, 200, 
+      getBrandValues(bucket,json.cameras),
+      getBrandLabels(bucket,json.cameras), "#fff");
+}
 function getBrandGroups(bucket,cameras) {
   return _.groupBy(_.map(bucket.i, function(b) { return cameras[b[0]].brand }));
 }
@@ -144,29 +141,19 @@ function getBrandValues(bucket,cameras) {
   var groups = getBrandGroups(bucket,cameras);
   return _.map(groups,function(k,v) { return k.length * 20; });
 }
-pieAnimate = function(paper, chart, values, labels) {
-  console.log(chart);
-    cx = cy = 350;
-    var paper = this;
-    var rad = Math.PI / 180;
+var reds = ["#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000"];
+function getRed() { return reds.pop(); }
 
-    var apple = _.filter(chart,function(em) { return em.node.textContent == "Apple"; })[0];
-    var canon = _.filter(chart,function(em) { return em.node.textContent == "Canon"; })[0];
-    var nikon = _.filter(chart,function(em) { return em.node.textContent == "Nikon"; })[0];
-    vals = [];
-    _.each(values,function(v,i) { vals[labels[i].toLowerCase()] = v / 100 * 360;  });
-    function sector(cx, cy, r, startAngle, endAngle) {
-      console.log(cx,cy,r,startAngle,endAngle);
-        var x1 = cx + r * Math.cos(-startAngle * rad),
-            x2 = cx + r * Math.cos(-endAngle * rad),
-            y1 = cy + r * Math.sin(-startAngle * rad),
-            y2 = cy + r * Math.sin(-endAngle * rad);
-        return ["M", cx, cy, "L", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "z"];
-    }
-    apple.animate
-    apple.prev.animate({path: sector(cx,cy,200,0,vals.apple) }, 400);
-    nikon.prev.animate({path: sector(cx,cy,200,vals.apple,vals.apple + vals.nikon) }, 400);
-    canon.prev.animate({path: sector(cx,cy,200,vals.nikon + vals.apple,vals.apple + vals.nikon + vals.canon) }, 400);
+var yellows = ["#FFDD00","#EDBE00","#F0E118", "#F0C518", "#EDB200"];
+function getYellow() { return yellows.pop(); }
+
+var grays = ["#AAAAAA","#A9A9A9","#B2B2B2","#C9C9C9","#D5D5D5", "#D9D9D9", "#AAAAAA"];
+function getGray() { return grays.pop(); }
+
+function getColour(brand) {
+  if (brand == "Apple") return getGray();
+  if (brand == "Nikon") return getYellow();
+  if (brand == "Canon") return getRed();
 }
 Raphael.fn.pieChart = function (cx, cy, r, values, labels, stroke) {
     var paper = this,
