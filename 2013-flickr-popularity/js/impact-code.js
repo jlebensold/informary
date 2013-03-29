@@ -48,16 +48,17 @@ var process = function (json) {
         var line = r.path("M0 0L0 300").attr({"stroke": "#8a3aFF", "stroke-width":"55", "z-index":1000, opacity: 0});
 
         for (var j = 0, jj = json.buckets.length; j < jj; j++) {
-            var users = json.buckets[j].i;
+            var cameras = json.buckets[j].i;
             h = 50;
-            for (var i = 0, ii = users.length; i < ii; i++) {
-                p = pathes[users[i][0]];
+            for (var i = 0, ii = cameras.length; i < ii; i++) {
+                p = pathes[cameras[i][0]];
                 if (!p) {
-                    p = pathes[users[i][0]] = {f:[], b:[]};
+                    p = pathes[cameras[i][0]] = {f:[], b:[]};
                 }
-                p.f.push([x, h, users[i][1]]);
-                p.b.unshift([x, h += Math.max(Math.round(Math.log(users[i][1]) * 5), 1)]);
+                p.f.push([x, h, cameras[i][1]]);
+                p.b.unshift([x, h += Math.max(Math.round(Math.log(cameras[i][1]) * 5), 1)]);
                 h += 2;
+                console.log(cameras[i][0]);
             }
             var dt = new Date(json.buckets[j].date);
             //var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
@@ -70,6 +71,8 @@ var process = function (json) {
         var c = 0;
         for (var i in pathes) {
             labels[i] = r.set();
+            r.circle(20,67,17).attr({'stroke-width': 2, 'stroke': "#EB7879", fill: "#CE0914" });
+            r.text(20,67, json.cameras[i].name).attr({font: "7px 'Arial' " });
             var clr = Raphael.getColor();
             var clr = getColour(json.cameras[i].brand);
             pathes[i].p = r.path().attr({fill: clr, stroke: clr});
