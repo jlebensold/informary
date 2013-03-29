@@ -49,7 +49,7 @@ var process = function (json) {
 
         for (var j = 0, jj = json.buckets.length; j < jj; j++) {
             var users = json.buckets[j].i;
-            h = 0;
+            h = 50;
             for (var i = 0, ii = users.length; i < ii; i++) {
                 p = pathes[users[i][0]];
                 if (!p) {
@@ -60,10 +60,11 @@ var process = function (json) {
                 h += 2;
             }
             var dt = new Date(json.buckets[j].date);
-            var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
+            //var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
+            var dtext = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
                 
-            r.rect(x - 4, 0, 60, 300).attr({fill: "#DDDDDD", stroke: "none"}).toFront();
-            r.text(x + 25, h + 10, dtext).attr({"font": '9px "Arial"', stroke: "none", fill: "#3333FB"}).toFront();
+            r.rect(x - 4, 0, 98, 300).attr({fill: "#E4E7DC", stroke: "none"}).toFront();
+            r.text(x + 44, 25, dtext).attr({"font": '11px "Arial"', stroke: "none", fill: "#C2C3BB"}).toFront();
             x += 100;
         }
         var c = 0;
@@ -106,7 +107,7 @@ var process = function (json) {
             })(i);
         }
         $("#chart").mousemove(function (e) {
-          updatePie(e,json,line, this);
+//          updatePie(e,json,line, this);
         });
     }
     
