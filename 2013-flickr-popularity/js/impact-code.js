@@ -8,6 +8,7 @@ var process = function (json) {
         lgnd = $("#legend")[0],
         label = $("#label")[0],
         plchldr = $("#placeholder")[0];
+    var chartTop = 60;
     function finishes() {
         for (var i in json.cameras) {
             var start, end;
@@ -44,13 +45,14 @@ var process = function (json) {
     }
     var lineBlocks = [];
     function block() {
+        r.rect(0, 0, 4000, chartTop).attr({fill: "#F4F6F1", stroke: "none"}).toFront();
         var p, h;
         finishes();
         var line = r.path("M0 0L0 300").attr({"stroke": "#8a3aFF", "stroke-width":"55", "z-index":1000, opacity: 0});
 
         for (var j = 0, jj = json.buckets.length; j < jj; j++) {
             var cameras = json.buckets[j].i;
-            h = 50;
+            h = 50 + chartTop;
             for (var i = 0, ii = cameras.length; i < ii; i++) {
                 p = pathes[cameras[i][0]];
                 if (!p) {
@@ -63,12 +65,16 @@ var process = function (json) {
             var dt = new Date(json.buckets[j].date);
             //var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
             var dtext = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
-                
-            r.rect(x - 4, 0, 98, 300).attr({fill: "#E4E7DC", stroke: "none"}).toFront();
-            lineBlocks.push(r.rect(x - 4, 0, 99, 300).attr({fill: "none", stroke: "#F8F8F8", opacity: 0.5, "stroke-width":"1px" }));
-            r.text(x + 44, 25, dtext).attr({"font": '11px "Arial"', stroke: "none", fill: "#C2C3BB"}).toFront();
+            r.rect(x - 4, 0 + chartTop, 98, 50).attr({fill: "#E4E7DC", stroke: "none"}).toFront();
+            lineBlocks.push(r.rect(x - 4, 0 + chartTop, 99, 300).attr({fill: "none", stroke: "#F8F8F8", opacity: 0.5, "stroke-width":"1px" }));
+            r.text(x + 44, 25 + chartTop, dtext).attr({"font": '11px "Arial"', stroke: "none", fill: "#C2C3BB"}).toFront();
             x += 100;
         }
+        r.text(50, 43, "2009").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
+        r.text(544, 43, "2010").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
+        r.text(1244, 43, "2011").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
+        r.text(2244, 43, "2012").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
+        r.text(3444, 43, "2013").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
         var c = 0;
         for (var i in pathes) {
             labels[i] = r.set();
@@ -115,9 +121,6 @@ var process = function (json) {
           _.each(lineBlocks,function(dl){ dl.toFront(); });
           _.each(discLabels,function(dl){ dl.toFront(); });
         }
-        $("#chart").mousemove(function (e) {
-//          updatePie(e,json,line, this);
-        });
     }
     
 
@@ -136,17 +139,6 @@ function drawLabel(r,x,y,cam) {
   discLabels.push(r.text(x,y, txt.replace('EOS ','').replace('Digital ','').replace(/\ /g,'\n')).attr({font: "9px 'Arial' ", 
                                                       'font-weight': 'normal', 
                                                       fill: '#FFFFFF' }));
-}
-function updatePie(e,json,line, self) {
-  var xcoord = e.pageX - $(self).find('svg').offset().left + $("#chart svg").scrollLeft();
-  var xcoord = Math.floor(xcoord / 100)*100 + 25 + 1;
-  line.animate({ path: "M"+xcoord+" 0L"+xcoord+" 300" , opacity: "0.3"}, 0).toFront();
-  $("#pie").empty();
-  var bucket = json.buckets[Math.floor(xcoord / 100)];
-    pie = Raphael("pie", 700, 700);
-    piechart = pie.pieChart(350, 350, 200, 
-      getBrandValues(bucket,json.cameras),
-      getBrandLabels(bucket,json.cameras), "#fff");
 }
 function getBrandGroups(bucket,cameras) {
   return _.groupBy(_.map(bucket.i, function(b) { return cameras[b[0]].brand }));
@@ -170,7 +162,7 @@ function getRed() { return reds.pop(); }
 var yellows = ["#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D"];
 function getYellow() { return yellows.pop(); }
 
-var grays = ["#AAAAAA","#A9A9A9","#B2B2B2","#C9C9C9","#D5D5D5", "#D9D9D9", "#AAAAAA","#AAAAAA","#A9A9A9","#B2B2B2","#C9C9C9","#D5D5D5", "#D9D9D9", "#AAAAAA"];
+var grays = ["#B2B2B2","#A9A9A9","#B2B2B2","#A9A9A9","#909090", "#999999", "#B2B2B2","#C9C9C9", "#C2C2C2", "#B2B2B2"];
 function getGray() { return grays.pop(); }
 
 function getColour(brand) {
