@@ -159,10 +159,10 @@ function getBrandValues(bucket,cameras) {
 var reds = ["#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000","#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000"];
 function getRed() { return reds.pop(); }
 
-var yellows = ["#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D"];
+var yellows = ["#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D","#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D"];
 function getYellow() { return yellows.pop(); }
 
-var grays = ["#B2B2B2","#A9A9A9","#B2B2B2","#A9A9A9","#909090", "#999999", "#B2B2B2","#C9C9C9", "#C2C2C2", "#B2B2B2"];
+var grays = ["#B2B2B2","#A9A9A9","#B2B2B2","#A9A9A9","#909090", "#999999", "#B2B2B2","#C9C9C9", "#C2C2C2", "#B2B2B2","#B2B2B2","#A9A9A9","#B2B2B2","#A9A9A9","#909090", "#999999", "#B2B2B2","#C9C9C9", "#C2C2C2", "#B2B2B2"];
 function getGray() { return grays.pop(); }
 
 function getColour(brand) {
