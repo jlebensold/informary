@@ -1,6 +1,6 @@
 var process = function (json) {
     var x = 0,
-        r = Raphael("chart", 3650,250),
+        r = Raphael("chart", 3650,350),
         labels = {},
         textattr = {"font": '9px "Arial"', stroke: "none", fill: "#fff"},
         pathes = {},
@@ -42,6 +42,7 @@ var process = function (json) {
             }
         }
     }
+    var lineBlocks = [];
     function block() {
         var p, h;
         finishes();
@@ -58,21 +59,19 @@ var process = function (json) {
                 p.f.push([x, h, cameras[i][1]]);
                 p.b.unshift([x, h += Math.max(Math.round(Math.log(cameras[i][1]) * 5), 1)]);
                 h += 2;
-                console.log(cameras[i][0]);
             }
             var dt = new Date(json.buckets[j].date);
             //var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
             var dtext = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
                 
             r.rect(x - 4, 0, 98, 300).attr({fill: "#E4E7DC", stroke: "none"}).toFront();
+            lineBlocks.push(r.rect(x - 4, 0, 99, 300).attr({fill: "none", stroke: "#F8F8F8", opacity: 0.5, "stroke-width":"1px" }));
             r.text(x + 44, 25, dtext).attr({"font": '11px "Arial"', stroke: "none", fill: "#C2C3BB"}).toFront();
             x += 100;
         }
         var c = 0;
         for (var i in pathes) {
             labels[i] = r.set();
-            r.circle(20,67,17).attr({'stroke-width': 2, 'stroke': "#EB7879", fill: "#CE0914" });
-            r.text(20,67, json.cameras[i].name).attr({font: "7px 'Arial' " });
             var clr = Raphael.getColor();
             var clr = getColour(json.cameras[i].brand);
             pathes[i].p = r.path().attr({fill: clr, stroke: clr});
@@ -80,6 +79,9 @@ var process = function (json) {
             var th = Math.round(pathes[i].f[0][1] + (pathes[i].b[pathes[i].b.length - 1][1] - pathes[i].f[0][1]) / 2 + 3);
             var X = pathes[i].f[0][0] + 50,
                 Y = pathes[i].f[0][1];
+
+            if (X == 50) {X = 65}
+            drawLabel(r,X - 44,Y + 19,json.cameras[i]);
             for (var j = 1, jj = pathes[i].f.length; j < jj; j++) {
                 path = path.concat("C", X + 20, ",", Y, ",");
                 X = pathes[i].f[j][0];
@@ -103,11 +105,15 @@ var process = function (json) {
                 labels[i].show();
                 pathes[i].p.toFront();
                 labels[i].toFront();
+                _.each(lineBlocks,function(dl){ dl.toFront(); });
+                _.each(discLabels,function(dl){ dl.toFront(); });
                 label.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
                 lgnd.style.backgroundColor = pathes[i].p.attr("fill");
                 nmhldr.className = "";
               });
             })(i);
+          _.each(lineBlocks,function(dl){ dl.toFront(); });
+          _.each(discLabels,function(dl){ dl.toFront(); });
         }
         $("#chart").mousemove(function (e) {
 //          updatePie(e,json,line, this);
@@ -121,6 +127,16 @@ var process = function (json) {
         block();
     }
 };
+var discLabels = [];
+function drawLabel(r,x,y,cam) {
+  c = getColour(cam.brand);
+  discLabels.push(r.circle(x,y,19).attr({'stroke-width': 2, 'stroke': shadeColor(c,-10), fill: c }));
+  txt = cam.name.split(' ');
+  txt = txt.slice(1).join(' ');
+  discLabels.push(r.text(x,y, txt.replace('EOS ','').replace('Digital ','').replace(/\ /g,'\n')).attr({font: "9px 'Arial' ", 
+                                                      'font-weight': 'normal', 
+                                                      fill: '#FFFFFF' }));
+}
 function updatePie(e,json,line, self) {
   var xcoord = e.pageX - $(self).find('svg').offset().left + $("#chart svg").scrollLeft();
   var xcoord = Math.floor(xcoord / 100)*100 + 25 + 1;
@@ -140,18 +156,21 @@ function getBrandLabels(bucket,cameras) {
   var groups = getBrandGroups(bucket,cameras);
   return _.map(groups,function(k,v) { return v; });
 }
-
+function shadeColor(color, percent) {   
+  var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, B = (num >> 8 & 0x00FF) + amt, G = (num & 0x0000FF) + amt;
+  return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
+}
 function getBrandValues(bucket,cameras) { 
   var groups = getBrandGroups(bucket,cameras);
   return _.map(groups,function(k,v) { return k.length * 20; });
 }
-var reds = ["#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000"];
+var reds = ["#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000","#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000"];
 function getRed() { return reds.pop(); }
 
-var yellows = ["#FFDD00","#EDBE00","#F0E118", "#F0C518", "#EDB200"];
+var yellows = ["#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D"];
 function getYellow() { return yellows.pop(); }
 
-var grays = ["#AAAAAA","#A9A9A9","#B2B2B2","#C9C9C9","#D5D5D5", "#D9D9D9", "#AAAAAA"];
+var grays = ["#AAAAAA","#A9A9A9","#B2B2B2","#C9C9C9","#D5D5D5", "#D9D9D9", "#AAAAAA","#AAAAAA","#A9A9A9","#B2B2B2","#C9C9C9","#D5D5D5", "#D9D9D9", "#AAAAAA"];
 function getGray() { return grays.pop(); }
 
 function getColour(brand) {
