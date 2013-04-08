@@ -1,0 +1,111 @@
+#pie { 
+  margin: 0 auto;
+  text-align: center;
+  width: 700px;
+}
+body {
+    background: #F0F0F0;
+    color: #222;
+    font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
+}
+#holder {
+    height: 480px;
+    left: 50%;
+    margin: -240px 0 0 -320px;
+    position: absolute;
+    top: 50%;
+    width: 640px;
+  }
+#chartWrapper {
+  position:relative;
+  margin: 0 0;
+  padding: 0 0;
+  background: #F4F6F1;
+
+}
+.ranking {
+  margin: 0 0;
+  padding: 0 0;
+  position: absolute;
+  z-index: 1000;
+  list-style: none;
+  top: 147px;
+  left: -1px;;
+}
+  .ranking li {
+    background: #F4F6F1;
+    margin: 0px 1px 0 1px;
+    width: 35px;
+    height:39px;
+    vertical-align: middle;
+    line-height: 40px;
+    text-align: left;
+    padding-left: 5px;
+    color: #BAC2AE;
+    opacity: 0.8;
+    font-size:32px;
+    font-weight:bold;
+    border: 1px solid #E2E8DA;
+    border-width: 1px 1px 0px 1px;
+  }
+#chart {
+    padding-top: 20px;
+    width: 100%;
+    _width: 500px;
+    overflow: auto;
+    clear: left;
+    background: #F4F6F1;
+}
+#chart svg
+{
+  background: #D5DCCB;
+  margin-left: 42px;
+}
+  #chart text{ 
+  }
+  #chart tspan{
+  } 
+  #chart tspan:hover {
+  }
+.invisible {
+    visibility: hidden;
+}
+.hidden {
+    display: none;
+}
+#legend,
+#legend2 {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    width: 1em;
+    height: 1em;
+    border: solid 1px #000;
+    margin-right: .3em;
+    line-height: 1;
+}
+#name, 
+#name2 {
+    float: left;
+    clear: left;
+}
+#name div,
+#name2 div {
+    float: left;
+}
+#placeholder {
+    clear: left;
+    color: #999;
+}
+em {
+    color: #666;
+    font-style: normal;
+}
+form {
+    margin: 0;
+    padding: 0;
+}
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
