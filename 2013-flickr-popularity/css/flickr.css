@@ -24,6 +24,8 @@ width: 100px;
   width: 700px;
 }
 body {
+  margin: 0 0;
+padding: 0 0;
     background: #FFF;
     color: #222;
     font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
@@ -57,6 +59,7 @@ footer {
   }
 .well { 
   padding: 30px 0px;
+  margin: 0 0;
   background: #F4F6F1;
 }
 h3 {
