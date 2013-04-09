@@ -1,10 +1,9 @@
 var process = function (json) {
     var x = 0,
-        r = Raphael("chart", 3650,350),
+        r = Raphael("chart", 3650,310),
         labels = {},
         textattr = {"font": '9px "Arial"', stroke: "none", fill: "#fff"},
         pathes = {},
-        nmhldr = $("#name")[0],
         lgnd = $("#legend")[0],
         label = $("#label")[0],
         plchldr = $("#placeholder")[0];
@@ -45,7 +44,7 @@ var process = function (json) {
     }
     var lineBlocks = [];
     function block() {
-        r.rect(0, 0, 4000, chartTop).attr({fill: "#F4F6F1", stroke: "none"}).toFront();
+        r.rect(-100, 0, 4000, chartTop).attr({fill: "#F4F6F1", stroke: "none"}).toFront();
         var p, h;
         finishes();
         var line = r.path("M0 0L0 300").attr({"stroke": "#8a3aFF", "stroke-width":"55", "z-index":1000, opacity: 0});
@@ -63,7 +62,6 @@ var process = function (json) {
                 h += 2;
             }
             var dt = new Date(json.buckets[j].date);
-            //var dtext = dt.getDate() + " " + ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
             var dtext = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"][dt.getMonth()] + " " + dt.getFullYear();
             r.rect(x - 4, 0 + chartTop, 98, 50).attr({fill: "#E4E7DC", stroke: "none"}).toFront();
             lineBlocks.push(r.rect(x - 4, 0 + chartTop, 99, 300).attr({fill: "none", stroke: "#F8F8F8", opacity: 0.5, "stroke-width":"1px" }));
@@ -102,22 +100,6 @@ var process = function (json) {
             pathes[i].p.attr({path: path + "z"});
             labels[i].hide();
             var current = null;
-            (function (i) {
-              pathes[i].p.mouseover(function (e) {
-                if (current != null) {
-                    labels[current].hide();
-                }
-                current = i;
-                labels[i].show();
-                pathes[i].p.toFront();
-                labels[i].toFront();
-                _.each(lineBlocks,function(dl){ dl.toFront(); });
-                _.each(discLabels,function(dl){ dl.toFront(); });
-                label.innerHTML = json.cameras[i].name + " <em>(" + json.cameras[i].brand + ")</em>";
-                lgnd.style.backgroundColor = pathes[i].p.attr("fill");
-                nmhldr.className = "";
-              });
-            })(i);
           _.each(lineBlocks,function(dl){ dl.toFront(); });
           _.each(discLabels,function(dl){ dl.toFront(); });
         }

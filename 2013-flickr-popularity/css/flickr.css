@@ -8,6 +8,19 @@ body {
     color: #222;
     font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
 }
+h1 {
+  color: #535353;
+  font-size: 23px;
+}
+h2 {
+  color: #6C6C6C;
+  font-size: 18px;
+}
+p { 
+  margin-left: 24px;
+
+}
+/* charting */
 #holder {
     height: 480px;
     left: 50%;
@@ -19,8 +32,8 @@ body {
 #chartWrapper {
   position:relative;
   margin: 0 0;
-  padding: 0 0;
-  background: #F4F6F1;
+  padding: 0 0px;
+  background: #CBD5BF;
 
 }
 .ranking {
@@ -29,8 +42,8 @@ body {
   position: absolute;
   z-index: 1000;
   list-style: none;
-  top: 147px;
-  left: -1px;;
+  top: 109px;
+  left: 48px;
 }
   .ranking li {
     background: #F4F6F1;
@@ -49,17 +62,16 @@ body {
     border-width: 1px 1px 0px 1px;
   }
 #chart {
-    padding-top: 20px;
+    padding: 0px 0px 20px 0px;
+    margin-left: 0px;
     width: 100%;
     _width: 500px;
     overflow: auto;
     clear: left;
-    background: #F4F6F1;
 }
 #chart svg
 {
-  background: #D5DCCB;
-  margin-left: 42px;
+  padding-left: 95px;
 }
   #chart text{ 
   }
@@ -95,17 +107,4 @@ body {
 #placeholder {
     clear: left;
     color: #999;
-}
-em {
-    color: #666;
-    font-style: normal;
-}
-form {
-    margin: 0;
-    padding: 0;
-}
-fieldset {
-    margin: 0;
-    padding: 0;
-    border: none;
 }
