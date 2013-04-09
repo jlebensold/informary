@@ -4,21 +4,27 @@
   width: 700px;
 }
 body {
-    background: #F0F0F0;
+    background: #FFF;
     color: #222;
     font: 300 100.1% "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif;
 }
 h1 {
   color: #535353;
-  font-size: 23px;
+  font-size:43px;
+  margin-left: 90px;
 }
 h2 {
   color: #6C6C6C;
   font-size: 18px;
+  margin-left: 90px;
 }
 p { 
-  margin-left: 24px;
-
+  margin-left: 90px;
+}
+h1,h2,p,li {
+  font-family: 'Quattrocento Sans', sans-serif;
+}
+footer {
 }
 /* charting */
 #holder {
@@ -29,6 +35,16 @@ p {
     top: 50%;
     width: 640px;
   }
+.well { 
+  padding: 50px 0px;
+  background: #F4F6F1;
+}
+h3 {
+  font-size: 32px;
+  color: #666;
+  margin-left: 90px;
+  font-weight: 500;
+}
 #chartWrapper {
   position:relative;
   margin: 0 0;
@@ -36,13 +52,55 @@ p {
   background: #CBD5BF;
 
 }
+#leadIn { 
+  width: 100px;
+  height: 309px;
+  position: absolute;
+  top: 0px;
+  left: 90px;
+  background: #F1F4ED;
+}
+  #leadIn ul {
+    list-style: none;
+    padding: 0 0;
+    margin: 0 0;
+  }
+    #leadIn .leadbar { 
+      margin-top: 60px;
+      background: #E4E7DC;;
+      height: 48px;
+
+    }
+    #leadIn ul li {
+      width: 98px;
+      margin-bottom:1px;
+      height: 39px;
+    }
+      #leadIn ul li i {
+        display: block;
+        width: 100px;
+        height: 39px;
+        background: url('../img/cambrands.png') transparent;
+      }
+    #leadIn ul li.apple {
+      background: #B2B2B2;
+    }
+    #leadIn ul li.apple i { background-position:  0 45px; }
+    #leadIn ul li.nikon i { background-position:  0 263px; }
+    #leadIn ul li.canon i { background-position:  0 145px; }
+    #leadIn ul li.canon {
+      background: #F00;
+    }
+    #leadIn ul li.nikon {
+      background: #F0C62D;
+    }
 .ranking {
   margin: 0 0;
   padding: 0 0;
   position: absolute;
   z-index: 1000;
   list-style: none;
-  top: 109px;
+  top: 108px;
   left: 48px;
 }
   .ranking li {
@@ -68,10 +126,13 @@ p {
     _width: 500px;
     overflow: auto;
     clear: left;
+    position: relative;
 }
 #chart svg
 {
-  padding-left: 95px;
+  position: relative;
+  margin-left: 190px;
+  background: #ECECEC;
 }
   #chart text{ 
   }

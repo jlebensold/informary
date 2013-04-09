@@ -1,13 +1,13 @@
 var process = function (json) {
     var x = 0,
-        r = Raphael("chart", 3650,310),
+        r = Raphael("chart", 3650,309),
         labels = {},
         textattr = {"font": '9px "Arial"', stroke: "none", fill: "#fff"},
         pathes = {},
         lgnd = $("#legend")[0],
         label = $("#label")[0],
         plchldr = $("#placeholder")[0];
-    var chartTop = 60;
+    var chartTop = 59;
     function finishes() {
         for (var i in json.cameras) {
             var start, end;
@@ -68,35 +68,43 @@ var process = function (json) {
             r.text(x + 44, 25 + chartTop, dtext).attr({"font": '11px "Arial"', stroke: "none", fill: "#C2C3BB"}).toFront();
             x += 100;
         }
-        r.text(50, 43, "2009").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
-        r.text(544, 43, "2010").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
-        r.text(1244, 43, "2011").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
-        r.text(2244, 43, "2012").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
-        r.text(3444, 43, "2013").attr({font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"}).toFront();
+        var yearAttr = {font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"};
+        r.text(52,   44, "2009").attr(yearAttr).toFront();
+        r.text(546,  44, "2010").attr(yearAttr).toFront();
+        r.text(1246, 44, "2011").attr(yearAttr).toFront();
+        r.text(2246, 44, "2012").attr(yearAttr).toFront();
+        r.text(3446, 44, "2013").attr(yearAttr).toFront();
         var c = 0;
         for (var i in pathes) {
             labels[i] = r.set();
-            var clr = Raphael.getColor();
-            var clr = getColour(json.cameras[i].brand);
-            pathes[i].p = r.path().attr({fill: clr, stroke: clr});
-            var path = "M".concat(pathes[i].f[0][0], ",", pathes[i].f[0][1], "L", pathes[i].f[0][0] + 50, ",", pathes[i].f[0][1]);
             var th = Math.round(pathes[i].f[0][1] + (pathes[i].b[pathes[i].b.length - 1][1] - pathes[i].f[0][1]) / 2 + 3);
             var X = pathes[i].f[0][0] + 50,
                 Y = pathes[i].f[0][1];
+            var clr = getColour(json.cameras[i].brand);
+
 
             if (X == 50) {X = 65}
             drawLabel(r,X - 44,Y + 19,json.cameras[i]);
+
+
+// begin drawing lines
+            var offset = 20;
+            var xAdder = 50;
+            pathes[i].p = r.path().attr({fill: clr, stroke: clr});
+            var path = "M".concat(pathes[i].f[0][0], ",", pathes[i].f[0][1], "L", pathes[i].f[0][0] + xAdder, ",", pathes[i].f[0][1]);
+
             for (var j = 1, jj = pathes[i].f.length; j < jj; j++) {
-                path = path.concat("C", X + 20, ",", Y, ",");
+                path = path.concat("C", X + offset, ",", Y, ",");
                 X = pathes[i].f[j][0];
                 Y = pathes[i].f[j][1];
-                path = path.concat(X - 20, ",", Y, ",", X, ",", Y, "L", X += 50, ",", Y);
+                path = path.concat(X - offset, ",", Y, ",", X, ",", Y, "L", X += xAdder, ",", Y);
                 th = Math.round(Y + (pathes[i].b[pathes[i].b.length - 1 - j][1] - Y) / 2 + 3);
             }
-            path = path.concat("L", pathes[i].b[0][0] + 50, ",", pathes[i].b[0][1], ",", pathes[i].b[0][0], ",", pathes[i].b[0][1]);
+            path = path.concat("L", pathes[i].b[0][0] + xAdder, ",", pathes[i].b[0][1], ",", pathes[i].b[0][0], ",", pathes[i].b[0][1]);
             for (var j = 1, jj = pathes[i].b.length; j < jj; j++) {
-                path = path.concat("C", pathes[i].b[j][0] + 70, ",", pathes[i].b[j - 1][1], ",", pathes[i].b[j][0] + 70, ",", pathes[i].b[j][1], ",", pathes[i].b[j][0] + 50, ",", pathes[i].b[j][1], "L", pathes[i].b[j][0], ",", pathes[i].b[j][1]);
+                path = path.concat("C", pathes[i].b[j][0] + 70, ",", pathes[i].b[j - 1][1], ",", pathes[i].b[j][0] + 70, ",", pathes[i].b[j][1], ",", pathes[i].b[j][0] + xAdder, ",", pathes[i].b[j][1], "L", pathes[i].b[j][0], ",", pathes[i].b[j][1]);
             }
+// end drawing lines
             pathes[i].p.attr({path: path + "z"});
             labels[i].hide();
             var current = null;
