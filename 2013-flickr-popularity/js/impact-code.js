@@ -146,13 +146,28 @@ function getBrandValues(bucket,cameras) {
   var groups = getBrandGroups(bucket,cameras);
   return _.map(groups,function(k,v) { return k.length * 20; });
 }
-var reds = ["#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000","#9A0000","#A50000","#B90000","#CE0000","#DA0000", "#EA0000","#FA0000", "#FF0000"];
+var reds = [
+            "#c00000", "#a43833","#bf4842","#ea443c","#6e0000","#a10000",
+            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000",
+            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000",
+            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000",
+            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000"];
 function getRed() { return reds.pop(); }
-
-var yellows = ["#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D","#F1C62D","#F1C62D","#F1C62D", "#F0C518", "#EDB200","#FFDD00","#F1D63D","#F1C62D", "#F1D63D", "#F1C62D"];
+var yellows = [
+            "#ffd802","#fff000","#ffc000",
+            "#ffd802","#fff000","#ffc000",
+            "#ffd802","#fff000","#ffc000",
+            "#ffd802","#fff000","#ffc000",
+            "#ffd802","#fff000","#ffc000",
+          ];
 function getYellow() { return yellows.pop(); }
 
-var grays = ["#B2B2B2","#A9A9A9","#B2B2B2","#A9A9A9","#909090", "#999999", "#B2B2B2","#C9C9C9", "#C2C2C2", "#B2B2B2","#B2B2B2","#A9A9A9","#B2B2B2","#A9A9A9","#909090", "#999999", "#B2B2B2","#C9C9C9", "#C2C2C2", "#B2B2B2"];
+var grays= [
+            "#4f4f4f","#6b6b6b","#989898","#c0c0c0",
+            "#4f4f4f","#6b6b6b","#989898","#c0c0c0",
+            "#4f4f4f","#6b6b6b","#989898","#c0c0c0",
+            "#4f4f4f","#6b6b6b","#989898","#c0c0c0"
+            ];
 function getGray() { return grays.pop(); }
 
 function getColour(brand) {
