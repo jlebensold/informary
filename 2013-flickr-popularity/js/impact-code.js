@@ -1,8 +1,8 @@
 var process = function (json) {
     var x = 0,
-        r = Raphael("chart", 3650,309),
+        r = Raphael("chart", 3650,350),
         labels = {},
-        textattr = {"font": '9px "Arial"', stroke: "none", fill: "#fff"},
+        textattr = {"font": '9px Quattrocento Sans', stroke: "none", fill: "#fff"},
         pathes = {},
         lgnd = $("#legend")[0],
         label = $("#label")[0],
@@ -44,7 +44,7 @@ var process = function (json) {
     }
     var lineBlocks = [];
     function block() {
-        r.rect(-100, 0, 4000, chartTop).attr({fill: "#F4F6F1", stroke: "none"}).toFront();
+        r.rect(-400, 0, 5000, chartTop).attr({fill: "#F4F6F1", stroke: "none"}).toFront();
         var p, h;
         finishes();
         var line = r.path("M0 0L0 300").attr({"stroke": "#8a3aFF", "stroke-width":"55", "z-index":1000, opacity: 0});
@@ -68,24 +68,24 @@ var process = function (json) {
             r.text(x + 44, 25 + chartTop, dtext).attr({"font": '11px "Arial"', stroke: "none", fill: "#C2C3BB"}).toFront();
             x += 100;
         }
-        var yearAttr = {font: "45px 'Arial'", fill: "#D5DCCB", stroke: "none"};
-        r.text(52,   44, "2009").attr(yearAttr).toFront();
-        r.text(546,  44, "2010").attr(yearAttr).toFront();
-        r.text(1246, 44, "2011").attr(yearAttr).toFront();
-        r.text(2246, 44, "2012").attr(yearAttr).toFront();
-        r.text(3446, 44, "2013").attr(yearAttr).toFront();
+        var yearAttr = {font: "45px 'Quattrocento Sans'", fill: "#D5DCCB", stroke: "none", 'font-weight': 'bold'};
+        r.text(52,   45, "2009").attr(yearAttr).toFront();
+        r.text(546,  45, "2010").attr(yearAttr).toFront();
+        r.text(1246, 45, "2011").attr(yearAttr).toFront();
+        r.text(2246, 45, "2012").attr(yearAttr).toFront();
+        r.text(3446, 45, "2013").attr(yearAttr).toFront();
         var c = 0;
         for (var i in pathes) {
             labels[i] = r.set();
             var th = Math.round(pathes[i].f[0][1] + (pathes[i].b[pathes[i].b.length - 1][1] - pathes[i].f[0][1]) / 2 + 3);
             var X = pathes[i].f[0][0] + 50,
                 Y = pathes[i].f[0][1];
+
+
+            if (X == 50) {X = 72; }
+            drawLabel(r,X - 48,Y + 22.5,json.cameras[i]);
+
             var clr = getColour(json.cameras[i].brand);
-
-
-            if (X == 50) {X = 65}
-            drawLabel(r,X - 44,Y + 19,json.cameras[i]);
-
 
 // begin drawing lines
             var offset = 20;
@@ -104,10 +104,22 @@ var process = function (json) {
             for (var j = 1, jj = pathes[i].b.length; j < jj; j++) {
                 path = path.concat("C", pathes[i].b[j][0] + 70, ",", pathes[i].b[j - 1][1], ",", pathes[i].b[j][0] + 70, ",", pathes[i].b[j][1], ",", pathes[i].b[j][0] + xAdder, ",", pathes[i].b[j][1], "L", pathes[i].b[j][0], ",", pathes[i].b[j][1]);
             }
+            drawFinish(r,X - 5,Y + 22.5,clr);
 // end drawing lines
             pathes[i].p.attr({path: path + "z"});
             labels[i].hide();
             var current = null;
+            (function (i) {
+              pathes[i].p.mouseover(function (e) {
+                if (current != null) {
+                    labels[current].hide();
+                }
+                current = i;
+                $(".legend").html(json.cameras[i].name);
+              });
+            })(i);
+          $("svg").mouseout(function(e) { $(".legend").html('<small><em>Hover over the track to view the camera model</em></small>'); });
+
           _.each(lineBlocks,function(dl){ dl.toFront(); });
           _.each(discLabels,function(dl){ dl.toFront(); });
         }
@@ -121,9 +133,12 @@ var process = function (json) {
     }
 };
 var discLabels = [];
+function drawFinish(r,x,y,color) {
+  discLabels.push(r.circle(x,y,21).attr({'stroke-width': 4, 'stroke': color, fill: color }));
+}
 function drawLabel(r,x,y,cam) {
   c = getColour(cam.brand);
-  discLabels.push(r.circle(x,y,19).attr({'stroke-width': 2, 'stroke': shadeColor(c,-10), fill: c }));
+  discLabels.push(r.circle(x,y,21).attr({'stroke-width': 4, 'stroke': shadeColor(c,10), fill: c }));
   txt = cam.name.split(' ');
   txt = txt.slice(1).join(' ');
   discLabels.push(r.text(x,y, txt.replace('EOS ','').replace('Digital ','').replace(/\ /g,'\n')).attr({font: "9px 'Arial' ", 
@@ -147,26 +162,32 @@ function getBrandValues(bucket,cameras) {
   return _.map(groups,function(k,v) { return k.length * 20; });
 }
 var reds = [
-            "#c00000", "#a43833","#bf4842","#ea443c","#6e0000","#a10000",
-            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000",
-            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000",
-            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000",
-            "#c00000","#a43833","#bf4842","#ea443c","#6e0000","#a10000"];
+    
+            "#9D000E","#9D000E",
+            "#BC0013", "#BC0013",
+            "#A23433","#A23433",
+            "#C70000","#C70000",
+            "#E93A3D","#E93A3D",
+            "#BD4342","#BD4342",
+            "#9D000E","#9D000E",
+            "#BC0013", "#BC0013"
+            ];
 function getRed() { return reds.pop(); }
 var yellows = [
-            "#ffd802","#fff000","#ffc000",
-            "#ffd802","#fff000","#ffc000",
-            "#ffd802","#fff000","#ffc000",
-            "#ffd802","#fff000","#ffc000",
-            "#ffd802","#fff000","#ffc000",
+            "#FEC108","#FEC108",
+            "#FEDA0A","#FEDA0A"
           ];
 function getYellow() { return yellows.pop(); }
 
 var grays= [
-            "#4f4f4f","#6b6b6b","#989898","#c0c0c0",
-            "#4f4f4f","#6b6b6b","#989898","#c0c0c0",
-            "#4f4f4f","#6b6b6b","#989898","#c0c0c0",
-            "#4f4f4f","#6b6b6b","#989898","#c0c0c0"
+            "#6f6f6f","#6f6f6f",
+            "#A0A0A0","#A0A0A0",
+            "#989898","#989898",
+            "#c0c0c0","#c0c0c0",
+            "#6f6f6f","#6f6f6f",
+            "#A0A0A0","#A0A0A0",
+            "#989898","#989898",
+            "#c0c0c0","#c0c0c0"
             ];
 function getGray() { return grays.pop(); }
 
